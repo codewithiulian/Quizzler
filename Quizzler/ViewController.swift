@@ -23,9 +23,15 @@ class ViewController: UIViewController {
     var givenAnswer : Bool = false
     var isAnswerCorrect : Bool = false
     
+    var totalQuestions : Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Show first question.
         questionLabel.text = questionBank.list[questionIndex].questionText
+        // Show second question.
+        totalQuestions = questionBank.list.count
+        print(questionIndex)
     }
 
 
@@ -34,27 +40,36 @@ class ViewController: UIViewController {
         givenAnswer = Bool(truncating: sender.tag as NSNumber)
         // Check it's correct.
         isAnswerCorrect = checkAnswer(givenAnswer, questionBank.list[questionIndex].answer)
-        // Do actions based on answer.
-        if isAnswerCorrect {
-            print("Correct")
-        }else{
-            print("Wrong")
-        }
+        // Process answer.
+        processAnswer(isAnswerCorrect)
         // Update UI.
         updateUI()
     }
     
+    func processAnswer(_ isCorrect: Bool) {
+        // Do actions based on answer.
+        if isCorrect {
+            print("Correct")
+        }else{
+            print("Wrong")
+        }
+    }
     
     func updateUI() {
-        // Show next question.
-        nextQuestion()
-        // Update the question.
-        questionLabel.text = questionBank.list[questionIndex].questionText
+        // Check if we've reached the end of the question list.
+        if questionIndex + 1 < totalQuestions {
+            // Show next question.
+            nextQuestion()
+            
+            // Update the question.
+            questionLabel.text = questionBank.list[questionIndex].questionText
+        }
     }
     
 
     func nextQuestion() {
         // Increment the question index.
+        
         questionIndex += 1
     }
     
