@@ -29,11 +29,9 @@ class ViewController: UIViewController {
     // When the app loads.
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Show first question.
-        questionLabel.text = questionBank.list[questionIndex].questionText
         // Define the total count of questions.
         totalQuestions = questionBank.list.count
-    }
+        showQuestion()    }
 
     // Answer buttons press callback (Touch Up Inside)
     @IBAction func answerPressed(_ sender: AnyObject) {
@@ -65,6 +63,7 @@ class ViewController: UIViewController {
             // While the user hasn't finished yet.
             // Show next question.
             nextQuestion()
+            showQuestion()
         }
         // If the user has reached the limit.
         else {
@@ -83,12 +82,18 @@ class ViewController: UIViewController {
         }
     }
     
-    // Responsible for showing the next question.
-    func nextQuestion() {
-        // Increment the question index.
-        questionIndex += 1
+    func showQuestion() {
         // Update the question.
         questionLabel.text = questionBank.list[questionIndex].questionText
+    }
+    
+    // Responsible for showing the next question.
+    func nextQuestion() {
+        if questionIndex > 0 {
+            showQuestion()
+        }
+        // Increment the question index.
+        questionIndex += 1
     }
     
     // Responsible for veryfying the answer.
@@ -100,6 +105,6 @@ class ViewController: UIViewController {
     // Restarts the quiz.
     func startOver() {
         questionIndex = 0;
-        nextQuestion()
+        showQuestion()
     }
 }
