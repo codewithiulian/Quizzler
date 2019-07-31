@@ -94,8 +94,12 @@ class ViewController: UIViewController {
     
     // Update the score on the screen.
     func updateScore() {
+        // Update the score text.
         scoreLabel.text = "Score \(String(currentScore))"
+        // Update the question counter.
         progressLabel.text = "\(String(questionIndex+1))/\(String(totalQuestions))"
+        // Update the progress bar.
+        progressBar.frame.size.width = (view.frame.size.width / CGFloat(totalQuestions)) * CGFloat(questionIndex+1)
     }
     
     func showQuestion() {
