@@ -99,6 +99,7 @@ class ViewController: UIViewController {
         // Update the question counter.
         progressLabel.text = "\(String(questionIndex+1))/\(String(totalQuestions))"
         // Update the progress bar.
+        // Get the (width of the screen divided by the number of questions) x current question.
         progressBar.frame.size.width = (view.frame.size.width / CGFloat(totalQuestions)) * CGFloat(questionIndex+1)
     }
     
