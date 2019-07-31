@@ -25,13 +25,16 @@ class ViewController: UIViewController {
     var isAnswerCorrect : Bool = false
     // Declare a total questions local variable.
     var totalQuestions : Int = 0
+    // Declare the initial score.
+    var currentScore = 0
     
     // When the app loads.
     override func viewDidLoad() {
         super.viewDidLoad()
         // Define the total count of questions.
         totalQuestions = questionBank.list.count
-        showQuestion()    }
+        showQuestion()
+    }
 
     // Answer buttons press callback (Touch Up Inside)
     @IBAction func answerPressed(_ sender: AnyObject) {
@@ -50,16 +53,14 @@ class ViewController: UIViewController {
     func processAnswer(_ isCorrect: Bool) {
         // Do actions based on answer.
         if isCorrect {
-            print("Correct")
-        }else{
-            print("Wrong")
+            currentScore += 1
         }
     }
     
     // Responsible for updating the screen based on different actions.
     func updateUI() {
-        // Check if we've reached the end of the question list.
-        if questionIndex + 1 < totalQuestions {
+        // If the user hasn't reached the limit.
+        if !hasReachedLimit() {
             // While the user hasn't finished yet.
             // Show next question.
             nextQuestion()
@@ -67,22 +68,38 @@ class ViewController: UIViewController {
         }
         // If the user has reached the limit.
         else {
-            // Define the UI Alert Controller object.
-            let alert = UIAlertController(title: "Great", message: "The quiz is finished.\nDo you want to start over?", preferredStyle: .alert )
-            // Declare the UI Alert Action to handle the alert.
-            let restartAction = UIAlertAction(title: "Restart", style: .default) { (UIAlertAction) in
-                // Start over on callback.
-                self.startOver()
-            }
-            // Add the action to the alert instance.
-            alert.addAction(restartAction)
-            // Show it to the screen.
-            present(alert, animated: true, completion: nil)
-            
+            // Alert the message.
+            alertUser()
         }
     }
     
+    func alertUser() {
+        // Define the UI Alert Controller object.
+        let alert = UIAlertController(title: "Great", message: "The quiz is finished.\nDo you want to start over?", preferredStyle: .alert )
+        // Declare the UI Alert Action to handle the alert.
+        let restartAction = UIAlertAction(title: "Restart", style: .default) { (UIAlertAction) in
+            // Start over on callback.
+            self.startOver()
+        }
+        // Add the action to the alert instance.
+        alert.addAction(restartAction)
+        // Show it to the screen.
+        present(alert, animated: true, completion: nil)
+    }
+    
+    // Check if we've reached the end of the question list.
+    func hasReachedLimit() -> Bool {
+        return questionIndex == totalQuestions - 1
+    }
+    
+    // Update the score on the screen.
+    func updateScore() {
+        scoreLabel.text = "Score \(String(currentScore))"
+        progressLabel.text = "\(String(questionIndex+1))/\(String(totalQuestions))"
+    }
+    
     func showQuestion() {
+        updateScore()
         // Update the question.
         questionLabel.text = questionBank.list[questionIndex].questionText
     }
@@ -104,7 +121,11 @@ class ViewController: UIViewController {
     
     // Restarts the quiz.
     func startOver() {
+        // Reset the current user score.
+        currentScore = 0
+        // Reset the question index.
         questionIndex = 0;
+        // Show the first question.
         showQuestion()
     }
 }
