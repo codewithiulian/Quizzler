@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 
 class ViewController: UIViewController {
@@ -54,6 +55,9 @@ class ViewController: UIViewController {
         // Do actions based on answer.
         if isCorrect {
             currentScore += 1
+            ProgressHUD.showSuccess("Correct!")
+        }else{
+            ProgressHUD.showError("Wrong!")
         }
     }
     
